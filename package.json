@@ -1,0 +1,34 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend development for Gaming-GO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruendyant01/Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ruendyant01/Backend/issues"
+  },
+  "homepage": "https://github.com/ruendyant01/Backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "mongodb": "^5.0.0",
+    "mongoose": "^6.9.0",
+    "socket.io": "^4.5.4"
+  },
+  "devDependencies": {
+    "jest": "^29.4.1",
+    "mongoosejs-cli": "^1.0.7",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
+  }
+}
