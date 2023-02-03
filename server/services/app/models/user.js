@@ -34,6 +34,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       nik: DataTypes.STRING,
+      ktpImg: DataTypes.STRING,
+      selfieImg: DataTypes.STRING,
       role: DataTypes.STRING,
       phoneNumber: DataTypes.INTEGER,
       address: DataTypes.TEXT,

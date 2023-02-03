@@ -48,7 +48,45 @@ class Controllers {
         res.status(401).json({ message: 'Invalid email/password' });
         return;
       }
-      res.status(500).json({ message: 'Internal server error', error });
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static async fetchUsers(req, res) {
+    try {
+      const data = await User.findAll({ where: { approved: false }, attributes: { exclude: ['password'] } });
+      // const data = await User.findAll();
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static async fetchUserById(req, res) {
+    try {
+      const { id } = req.params;
+      const data = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+      if (!data) throw { name: '404' };
+
+      res.status(200).json(data);
+    } catch (error) {
+      if (error.name == '404') {
+        res.status(404).json({ message: 'Not found' });
+        return;
+      }
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static async updateUser(req, res) {
+    try {
+      // const {} = req.body;
+      const { id } = req.params;
+      // const findUser = await User.findByPk(id);
+      await User.update({ approved: true }, { where: { id } });
+      res.status(200).json({ message: 'User has been approved' });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
     }
   }
 }

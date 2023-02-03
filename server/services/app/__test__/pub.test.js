@@ -100,6 +100,23 @@ describe('Customer Routes Test', () => {
           return done();
         });
     });
+
+    test('500 Failed register - should return error if type format is invalid', (done) => {
+      request(app)
+        .post('/pub/register')
+        .send({
+          email: 'user12@mail.co',
+          password: 12345,
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          expect(body).toHaveProperty('message', 'Internal server error');
+          return done();
+        });
+    });
   });
 
   describe('POST /pub/login - user login', () => {
@@ -162,6 +179,23 @@ describe('Customer Routes Test', () => {
 
           expect(status).toBe(401);
           expect(body).toHaveProperty('message', 'Invalid email/password');
+          return done();
+        });
+    });
+
+    test('500 Failed login - should return error if type format is invalid', (done) => {
+      request(app)
+        .post('/pub/login')
+        .send({
+          email: 'user1@mail.co',
+          password: 12345,
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          expect(body).toHaveProperty('message', 'Internal server error');
           return done();
         });
     });
