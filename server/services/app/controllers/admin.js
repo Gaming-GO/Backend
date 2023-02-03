@@ -3,13 +3,14 @@ const { signToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
 
 class Controllers {
-  static async custRegister(req, res) {
+  static async register(req, res) {
     try {
-      const { username, email, password, location, role, phoneNumber, address, nik } = req.body;
-      const newUser = await User.create({ username, email, password, location, role, phoneNumber, address, nik });
+      const { email, password } = req.body;
+      const newUser = await User.create({ email, password, role: 'admin' });
 
       res.status(201).json({ id: newUser.id, email: newUser.email, role: newUser.role });
     } catch (error) {
+      //   console.log(error);
       if (error.name == 'SequelizeUniqueConstraintError' || error.name == 'SequelizeValidationError') {
         res.status(400).json({ message: error.errors[0].message });
         return;
@@ -18,8 +19,9 @@ class Controllers {
     }
   }
 
-  static async custLogin(req, res) {
+  static async login(req, res) {
     try {
+      console.log('masukkk');
       const { email, password } = req.body;
       if (!email) throw { name: 'empty_email' };
       if (!password) throw { name: 'empty_password' };

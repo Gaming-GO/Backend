@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Controllers = require('../controllers');
+const customerRouter = require('./customer');
+const adminRouter = require('./admin');
 
-router.get('/', (req, res) => {
-  res.send('Hello World! from routes');
-});
+router.use('/admin', adminRouter);
+router.use('/pub', customerRouter);
 
 module.exports = router;
