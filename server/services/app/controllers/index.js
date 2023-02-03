@@ -6,7 +6,7 @@ class Controllers {
   static async custRegister(req, res) {
     try {
       const { username, email, password, location, role, phoneNumber, address, nik } = req.body;
-      const newUser = await User.create({ username, email, password, location, role, phoneNumber, address, nik });
+      const newUser = await User.create({ username, email, password, location, role, phoneNumber, address, nik, approved: false });
 
       res.status(201).json({ id: newUser.id, email: newUser.email, role: newUser.role });
     } catch (error) {
