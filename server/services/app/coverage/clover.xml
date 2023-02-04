@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1675426980524" clover="3.2.0">
-  <project timestamp="1675426980524" name="All files">
-    <metrics statements="182" coveredstatements="178" conditionals="61" coveredconditionals="51" methods="23" coveredmethods="23" elements="266" coveredelements="252" complexity="0" loc="182" ncloc="182" packages="6" files="14" classes="14"/>
+<coverage generated="1675522296079" clover="3.2.0">
+  <project timestamp="1675522296080" name="All files">
+    <metrics statements="229" coveredstatements="218" conditionals="61" coveredconditionals="51" methods="31" coveredmethods="31" elements="321" coveredelements="300" complexity="0" loc="229" ncloc="229" packages="6" files="15" classes="15"/>
     <package name="app">
       <metrics statements="12" coveredstatements="12" conditionals="4" coveredconditionals="3" methods="0" coveredmethods="0"/>
       <file name="app.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\app.js">
@@ -21,12 +21,13 @@
       </file>
     </package>
     <package name="app.controllers">
-      <metrics statements="78" coveredstatements="76" conditionals="40" coveredconditionals="37" methods="6" coveredmethods="6"/>
+      <metrics statements="109" coveredstatements="100" conditionals="40" coveredconditionals="37" methods="12" coveredmethods="12"/>
       <file name="admin.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\controllers\admin.js">
-        <metrics statements="46" coveredstatements="44" conditionals="22" coveredconditionals="20" methods="4" coveredmethods="4"/>
+        <metrics statements="53" coveredstatements="49" conditionals="22" coveredconditionals="20" methods="5" coveredmethods="5"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
         <line num="7" count="6" type="stmt"/>
         <line num="8" count="6" type="stmt"/>
         <line num="9" count="6" type="stmt"/>
@@ -60,19 +61,25 @@
         <line num="57" count="1" type="stmt"/>
         <line num="59" count="1" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
-        <line num="66" count="2" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
         <line num="67" count="2" type="stmt"/>
         <line num="68" count="2" type="stmt"/>
-        <line num="69" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="71" count="1" type="stmt"/>
-        <line num="73" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="74" count="1" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="70" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="74" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="75" count="1" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="82" count="2" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="95" count="2" type="stmt"/>
       </file>
       <file name="index.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\controllers\index.js">
-        <metrics statements="32" coveredstatements="32" conditionals="18" coveredconditionals="17" methods="2" coveredmethods="2"/>
+        <metrics statements="56" coveredstatements="51" conditionals="18" coveredconditionals="17" methods="7" coveredmethods="7"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -80,31 +87,55 @@
         <line num="8" count="6" type="stmt"/>
         <line num="9" count="6" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
-        <line num="13" count="5" type="cond" truecount="4" falsecount="0"/>
-        <line num="14" count="4" type="stmt"/>
-        <line num="15" count="4" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="22" count="5" type="stmt"/>
-        <line num="23" count="5" type="stmt"/>
-        <line num="24" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="25" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="27" count="3" type="stmt"/>
-        <line num="28" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="30" count="3" type="stmt"/>
-        <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="37" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="43" count="1" type="stmt"/>
-        <line num="45" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="25" count="5" type="stmt"/>
+        <line num="26" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="30" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="39" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="43" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="47" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="1" type="stmt"/>
         <line num="49" count="1" type="stmt"/>
-        <line num="54" count="2" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="129" count="2" type="stmt"/>
       </file>
     </package>
     <package name="app.helpers">
@@ -113,7 +144,7 @@
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
-        <line num="4" count="7" type="stmt"/>
+        <line num="4" count="8" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="5" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
@@ -123,9 +154,9 @@
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
-        <line num="9" count="4" type="stmt"/>
+        <line num="9" count="6" type="stmt"/>
         <line num="12" count="2" type="stmt"/>
       </file>
     </package>
@@ -136,14 +167,14 @@
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="5" count="4" type="stmt"/>
-        <line num="6" count="4" type="stmt"/>
-        <line num="7" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="9" count="4" type="stmt"/>
-        <line num="11" count="3" type="stmt"/>
-        <line num="12" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="14" count="3" type="stmt"/>
-        <line num="18" count="3" type="stmt"/>
+        <line num="5" count="6" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="9" count="6" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="5" type="stmt"/>
+        <line num="18" count="5" type="stmt"/>
         <line num="22" count="1" type="cond" truecount="3" falsecount="1"/>
         <line num="23" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
@@ -152,20 +183,30 @@
       </file>
     </package>
     <package name="app.models">
-      <metrics statements="40" coveredstatements="39" conditionals="9" coveredconditionals="6" methods="12" coveredmethods="12"/>
+      <metrics statements="48" coveredstatements="47" conditionals="9" coveredconditionals="6" methods="14" coveredmethods="14"/>
       <file name="category.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\models\category.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+      </file>
+      <file name="detail.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\models\detail.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="4" count="2" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
       </file>
       <file name="device.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\models\device.js">
-        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="28" count="2" type="stmt"/>
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
       </file>
       <file name="index.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\models\index.js">
         <metrics statements="21" coveredstatements="20" conditionals="9" coveredconditionals="6" methods="3" coveredmethods="3"/>
@@ -181,38 +222,39 @@
         <line num="14" count="0" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
         <line num="19" count="2" type="stmt"/>
-        <line num="22" count="10" type="cond" truecount="3" falsecount="0"/>
-        <line num="25" count="8" type="stmt"/>
-        <line num="26" count="8" type="stmt"/>
+        <line num="22" count="12" type="cond" truecount="3" falsecount="0"/>
+        <line num="25" count="10" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
         <line num="29" count="2" type="stmt"/>
-        <line num="30" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="31" count="8" type="stmt"/>
+        <line num="30" count="10" type="cond" truecount="1" falsecount="1"/>
+        <line num="31" count="10" type="stmt"/>
         <line num="35" count="2" type="stmt"/>
         <line num="36" count="2" type="stmt"/>
         <line num="38" count="2" type="stmt"/>
       </file>
       <file name="transaction.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\models\transaction.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="27" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
       </file>
       <file name="user.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\models\user.js">
-        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
         <line num="50" count="2" type="stmt"/>
-        <line num="51" count="7" type="stmt"/>
+        <line num="51" count="8" type="stmt"/>
         <line num="54" count="2" type="stmt"/>
       </file>
     </package>
     <package name="app.routes">
-      <metrics statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="31" coveredstatements="31" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="admin.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\routes\admin.js">
-        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -222,16 +264,24 @@
         <line num="8" count="2" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
       </file>
       <file name="customer.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\routes\customer.js">
-        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
       </file>
       <file name="index.js" path="C:\Users\pewpew\Desktop\H8 Nando p3\Gaming-Go\Backend\server\services\app\routes\index.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

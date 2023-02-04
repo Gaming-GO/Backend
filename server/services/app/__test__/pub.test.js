@@ -2,7 +2,10 @@ const request = require('supertest');
 const app = require('../app');
 const sequelize = require('../models');
 // const { signToken, verifyToken } = require('../helpers/jwt');
-const { User } = require('../models');
+const { signToken, verifyToken } = require('../helpers/jwt');
+const { User, Device, Category } = require('../models');
+
+let validToken;
 
 const user1 = {
   email: 'user1@mail.co',
@@ -10,8 +13,69 @@ const user1 = {
   role: 'Seller',
 };
 
+const newCustomer = {
+  email: 'newCustomer@mail.co',
+  password: '12345',
+  role: 'seller',
+};
+
+const newDevice = {
+  name: 'MSI GAMING',
+  description: 'Laptop pakai 2 bulan',
+  imgUrl: 'https://static.bmdstatic.com/pk/product/large/61cd643e7e826.jpg',
+  price: 250000,
+  specs: 'Mid-End',
+  CategoryId: 1,
+};
+
+const device = {
+  name: 'Asus ROG',
+  description:
+    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+  imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFVzh6Me38Shs2X_rjyoH19D6Wk8XTwa-BmQ&usqp=CAU',
+  price: 100000,
+  // UserId: 1,
+  CategoryId: 1,
+  status: 'Available',
+};
+
+const category = {
+  id: 1,
+  name: 'Laptop',
+  interval: 3,
+};
+
+beforeAll((done) => {
+  // jest.restoreAllMocks();
+  // Category.create(category)
+  User.create(newCustomer)
+    .then((registeredUser) => {
+      validToken = signToken({
+        id: registeredUser.id,
+        email: registeredUser.email,
+      });
+      return Category.create(category);
+    })
+    .then(() => {
+      return Device.create(device);
+    })
+    .then(() => {
+      // console.log({ validToken, invalidToken });
+      done();
+    })
+    .catch((err) => {
+      done(err);
+    });
+});
+
 afterAll((done) => {
   User.destroy({ truncate: true, cascade: true, restartIdentity: true })
+    .then((_) => {
+      return Category.destroy({ truncate: true, cascade: true, restartIdentity: true });
+    })
+    .then((_) => {
+      return Device.destroy({ truncate: true, cascade: true, restartIdentity: true });
+    })
     .then((_) => {
       done();
     })
@@ -196,6 +260,101 @@ describe('Customer Routes Test', () => {
 
           expect(status).toBe(500);
           expect(body).toHaveProperty('message', 'Internal server error');
+          return done();
+        });
+    });
+  });
+
+  describe('GET /pub/devices - fetch devices', () => {
+    test('200 Success fetch - should return array of object', (done) => {
+      request(app)
+        .get('/pub/devices')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(Array.isArray(body)).toBeTruthy();
+          return done();
+        });
+    });
+
+    // test('500 ISE', (done) => {
+    //   jest.spyOn(Device, 'findAll').mockRejectedValue('Error');
+    //   request(app)
+    //     .get('/pub/devices')
+    //     .then((res) => {
+    //       // expect your response here
+    //       expect(res.status).toBe(500);
+    //       // expect(res.body).toBe({ message: 'Internal server error' });
+    //       expect(typeof body).toBe('object');
+    //       done();
+    //     })
+    //     .catch((err) => {
+    //       done(err);
+    //     });
+    // });
+  });
+
+  describe('GET /pub/devices/:id - fetch device by id', () => {
+    test('200 Success fetch - should return an object', (done) => {
+      request(app)
+        .get('/pub/devices/1')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(typeof body).toBe('object');
+          return done();
+        });
+    });
+  });
+
+  describe('GET /pub/categories - fetch categories', () => {
+    test('200 Success fetch - should return array of object', (done) => {
+      request(app)
+        .get('/pub/categories')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(Array.isArray(body)).toBeTruthy();
+          return done();
+        });
+    });
+  });
+
+  describe('GET /pub/categories/:id - fetch category by id', () => {
+    test('200 Success fetch - should return an object', (done) => {
+      request(app)
+        .get('/pub/categories/1')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(typeof body).toBe('object');
+          return done();
+        });
+    });
+  });
+
+  describe('POST /pub/devices - post device', () => {
+    test('201 Success post - should return an object', (done) => {
+      request(app)
+        .post('/pub/devices')
+        .set('access_token', validToken)
+        .send(newDevice)
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(201);
+          expect(typeof body).toBe('object');
+          expect(body).toHaveProperty('message', 'Success posted device');
           return done();
         });
     });
