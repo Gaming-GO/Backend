@@ -17,22 +17,16 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      DeviceId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Devices',
-        },
-        onDelete: 'cascade',
-        onUpdate: 'cascade',
-      },
       totalPrice: {
         type: Sequelize.INTEGER,
       },
-      rentStart: {
-        type: Sequelize.DATE,
-      },
-      rentEnd: {
-        type: Sequelize.DATE,
+      DetailId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Details',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       status: {
         type: Sequelize.STRING,

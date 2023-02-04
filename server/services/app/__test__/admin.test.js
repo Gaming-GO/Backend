@@ -289,4 +289,20 @@ describe('Admin Routes Test', () => {
         });
     });
   });
+
+  describe('PATCH /user/:id - update user by id', (done) => {
+    test('200 Success update user', (done) => {
+      request(app)
+        .patch('/admin/users/2')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(body).toHaveProperty('message', 'User has been approved');
+          return done();
+        });
+    });
+  });
 });

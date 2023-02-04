@@ -11,7 +11,7 @@ const authentication = async (req, res, next) => {
     const findUser = await User.findByPk(payload.id);
     if (!findUser) throw { name: 'invalid_token' };
 
-    req.headers = {
+    req.user = {
       id: findUser.id,
     };
 
