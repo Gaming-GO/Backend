@@ -19,14 +19,7 @@ module.exports = {
       },
       totalPrice: {
         type: Sequelize.INTEGER,
-      },
-      DetailId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Details',
-        },
-        onDelete: 'cascade',
-        onUpdate: 'cascade',
+        defaultValue: 0,
       },
       status: {
         type: Sequelize.STRING,

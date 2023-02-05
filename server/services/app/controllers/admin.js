@@ -21,7 +21,7 @@ class Controllers {
 
   static async login(req, res) {
     try {
-      console.log('masukkk');
+      // console.log('masukkk');
       const { email, password } = req.body;
       if (!email) throw { name: 'empty_email' };
       if (!password) throw { name: 'empty_password' };

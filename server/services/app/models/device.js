@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Device.belongsTo(models.User);
       Device.belongsTo(models.Category);
+      Device.hasMany(models.Detail);
     }
   }
   Device.init(
