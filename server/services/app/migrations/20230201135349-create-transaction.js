@@ -17,22 +17,9 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      DeviceId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Devices',
-        },
-        onDelete: 'cascade',
-        onUpdate: 'cascade',
-      },
       totalPrice: {
         type: Sequelize.INTEGER,
-      },
-      rentStart: {
-        type: Sequelize.DATE,
-      },
-      rentEnd: {
-        type: Sequelize.DATE,
+        defaultValue: 0,
       },
       status: {
         type: Sequelize.STRING,

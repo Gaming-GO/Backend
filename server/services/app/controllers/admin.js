@@ -1,7 +1,7 @@
 const { User } = require('../models');
 const { signToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
-
+const { Op } = require('sequelize');
 class Controllers {
   static async register(req, res) {
     try {
@@ -21,7 +21,7 @@ class Controllers {
 
   static async login(req, res) {
     try {
-      console.log('masukkk');
+      // console.log('masukkk');
       const { email, password } = req.body;
       if (!email) throw { name: 'empty_email' };
       if (!password) throw { name: 'empty_password' };
@@ -54,7 +54,7 @@ class Controllers {
 
   static async fetchUsers(req, res) {
     try {
-      const data = await User.findAll({ where: { approved: false }, attributes: { exclude: ['password'] } });
+      const data = await User.findAll({ where: { role: { [Op.notILike]: '%admin%' } }, attributes: { exclude: ['password'] } });
       // const data = await User.findAll();
       res.status(200).json(data);
     } catch (error) {
