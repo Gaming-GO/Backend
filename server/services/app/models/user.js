@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       ktpImg: DataTypes.STRING,
       selfieImg: DataTypes.STRING,
       role: DataTypes.STRING,
-      phoneNumber: DataTypes.INTEGER,
+      phoneNumber: DataTypes.STRING,
       address: DataTypes.TEXT,
       approved: DataTypes.BOOLEAN,
     },

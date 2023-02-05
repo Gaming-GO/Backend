@@ -1,4 +1,4 @@
-const { User, Device, Category, Transaction, Detail } = require('../models');
+const { User, Device, Category, Transaction, Detail, sequelize } = require('../models');
 const { signToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
 
@@ -104,8 +104,8 @@ class Controllers {
     }
   }
 
-  // ==
   static async rent(req, res) {
+    const t = await sequelize.transaction();
     try {
       const { rentEnd } = req.body;
       const { deviceId } = req.params;
@@ -115,13 +115,31 @@ class Controllers {
       const date = new Date();
       const todayDate = date.getDate();
       const untill = date.setDate(todayDate + rentEnd);
-      await Detail.create({ DeviceId: device.id, rentDate: new Date(), rentEnd: untill });
+
+      const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
+      await Transaction.update({ totalPrice: findTransaction.totalPrice + device.price }, { where: { id: findTransaction.id } }, { transaction: t });
+
+      await Detail.create({ TransactionId: findTransaction.id, DeviceId: device.id, price: device.price, rentDate: new Date(), rentEnd: untill }, { transaction: t });
+
+      await t.commit();
       res.status(201).json({ message: 'Success add to transaction' });
     } catch (error) {
+      await t.rollback();
       if (error.name == 'not_found') {
         res.status(404).json({ message: 'Not found' });
         return;
       }
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static async fetchTransactions(req, res) {
+    try {
+      const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
+      const findDetails = await Detail.findAll({ where: { TransactionId: findTransaction.id }, include: Device });
+      const data = { Transaction: findTransaction, Details: findDetails };
+      res.status(200).json(data);
+    } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
     }
   }

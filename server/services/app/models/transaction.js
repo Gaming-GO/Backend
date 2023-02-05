@@ -9,13 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Transaction.hasMany(models.Detail);
     }
   }
   Transaction.init(
     {
       UserId: DataTypes.INTEGER,
       totalPrice: DataTypes.INTEGER,
-      DetailId: DataTypes.INTEGER,
+      // DetailId: DataTypes.INTEGER,
       status: DataTypes.STRING,
     },
     {

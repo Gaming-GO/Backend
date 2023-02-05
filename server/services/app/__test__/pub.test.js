@@ -3,7 +3,7 @@ const app = require('../app');
 const sequelize = require('../models');
 // const { signToken, verifyToken } = require('../helpers/jwt');
 const { signToken, verifyToken } = require('../helpers/jwt');
-const { User, Device, Category } = require('../models');
+const { User, Device, Category, Transaction, Detail } = require('../models');
 
 let validToken;
 
@@ -54,6 +54,11 @@ beforeAll((done) => {
         id: registeredUser.id,
         email: registeredUser.email,
       });
+
+      // return Category.create(category);
+      return Transaction.create({ UserId: registeredUser.id });
+    })
+    .then(() => {
       return Category.create(category);
     })
     .then(() => {
@@ -75,6 +80,12 @@ afterAll((done) => {
     })
     .then((_) => {
       return Device.destroy({ truncate: true, cascade: true, restartIdentity: true });
+    })
+    .then((_) => {
+      return Detail.destroy({ truncate: true, cascade: true, restartIdentity: true });
+    })
+    .then((_) => {
+      return Transaction.destroy({ truncate: true, cascade: true, restartIdentity: true });
     })
     .then((_) => {
       done();
@@ -355,6 +366,59 @@ describe('Customer Routes Test', () => {
           expect(status).toBe(201);
           expect(typeof body).toBe('object');
           expect(body).toHaveProperty('message', 'Success posted device');
+          return done();
+        });
+    });
+  });
+
+  describe('POST /pub/rent/:deviceId - rent device', () => {
+    test('201 Success rent - should return an object', (done) => {
+      request(app)
+        .post('/pub/rent/1')
+        .set('access_token', validToken)
+        .send({ rentEnd: 2 })
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(201);
+          expect(typeof body).toBe('object');
+          expect(body).toHaveProperty('message', 'Success add to transaction');
+          return done();
+        });
+    });
+
+    test('404 Failed rent - should return an error', (done) => {
+      request(app)
+        .post('/pub/rent/100')
+        .set('access_token', validToken)
+        .send({ rentEnd: 2 })
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(404);
+          expect(typeof body).toBe('object');
+          expect(body).toHaveProperty('message', 'Not found');
+          return done();
+        });
+    });
+  });
+
+  describe('GET /pub/transactions - fetch transactions', () => {
+    test('200 Success fetch - should return an object', (done) => {
+      request(app)
+        .get('/pub/transactions')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(typeof body).toBe('object');
           return done();
         });
     });
