@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       phoneNumber: DataTypes.STRING,
       address: DataTypes.TEXT,
       approved: DataTypes.BOOLEAN,
-      // location: DataTypes.GEOMETRY('POINT'),
+      location: DataTypes.GEOMETRY('POINT'),
     },
     {
       sequelize,

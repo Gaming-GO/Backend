@@ -1,17 +1,19 @@
-const { User, Device, Category, Transaction, Detail, sequelize } = require('../models');
+const { User, Device, Category, Transaction, Detail, sequelize, Sequelize } = require('../models');
 const { signToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
+const midtransClient = require('midtrans-client');
 
 class Controllers {
   static async custRegister(req, res) {
     try {
-      const { username, email, password, location, phoneNumber, address, nik } = req.body;
-      const newUser = await User.create({ username, email, password, location, role: 'customer', phoneNumber, address, nik, approved: false });
+      const { username, email, password, long, lat, phoneNumber, address, nik } = req.body;
+      const newUser = await User.create({ username, email, password, location: Sequelize.fn(`ST_GeomFromText`, `POINT(${long} ${lat})`), role: 'customer', phoneNumber, address, nik, approved: false });
 
       await Transaction.create({ UserId: newUser.id });
 
       res.status(201).json({ id: newUser.id, email: newUser.email, role: newUser.role });
     } catch (error) {
+      console.log(error);
       if (error.name == 'SequelizeUniqueConstraintError' || error.name == 'SequelizeValidationError') {
         res.status(400).json({ message: error.errors[0].message });
         return;
@@ -96,7 +98,7 @@ class Controllers {
     try {
       // res.status(200).json({ message: 'OKKK' });
       const { name, description, imgUrl, price, specs, CategoryId } = req.body;
-      await Device.create({ name, description, imgUrl, price, specs, UserId: req.user.id, CategoryId, status: 'Available' });
+      await Device.create({ name, description, imgUrl, price, specs, UserId: req.user.id, CategoryId, status: 'Available', location: req.user.location });
 
       res.status(201).json({ message: 'Success posted device' });
     } catch (error) {
@@ -144,9 +146,64 @@ class Controllers {
     }
   }
 
+  // static async pay(req, res) {
+  //   const t = await sequelize.transaction();
+  //   try {
+  //     const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
+  //     await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
+  //     await Detail.destroy({ where: { TransactionId: findTransaction.id } }, { transaction: t });
+
+  //     await t.commit();
+  //     res.status(200).json({ message: 'Payment success' });
+  //   } catch (error) {
+  //     await t.rollback();
+  //     res.status(500).json({ message: 'Internal server error' });
+  //   }
+  // }
+
+  // =========== MIDTRANS ============
   static async pay(req, res) {
+    // const t = await sequelize.transaction();
+    try {
+      const user = await User.findByPk(req.user.id);
+      const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
+      // await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
+      // await Detail.destroy({ where: { TransactionId: findTransaction.id } }, { transaction: t });
+
+      let snap = new midtransClient.Snap({
+        isProduction: false,
+        serverKey: 'SB-Mid-server-SzvLU8-lfRmFVnxaY01g7dL6',
+      });
+
+      let parameter = {
+        transaction_details: {
+          order_id: 'TRANSACTIONS_' + Math.floor(100000 + Math.random() * 900000),
+          gross_amount: findTransaction.totalPrice,
+        },
+        credit_card: {
+          secure: true,
+        },
+        customer_details: {
+          name: user.name,
+          email: user.email,
+        },
+      };
+
+      const midtransToken = await snap.createTransaction(parameter);
+
+      // await t.commit();
+      // res.status(200).json({ message: 'Payment success' });
+      res.status(200).json({ midtransToken });
+    } catch (error) {
+      // await t.rollback();
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static async checkout(req, res) {
     const t = await sequelize.transaction();
     try {
+      // const user = await User.findByPk(req.user.id);
       const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
       await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
       await Detail.destroy({ where: { TransactionId: findTransaction.id } }, { transaction: t });
@@ -154,8 +211,71 @@ class Controllers {
       await t.commit();
       res.status(200).json({ message: 'Payment success' });
     } catch (error) {
+      console.log(error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+++++++++++++++++++++++++++++++++++++++++++');
       await t.rollback();
       res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+  // =================================
+
+  static async nearest(req, res) {
+    try {
+      // distance on meter unit
+      const distance = req.query.distance || 15000;
+      // const long = req.query.long || '-6.9439994342171225';
+      // const lat = req.query.lat || '107.5904275402039';
+
+      console.log('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+      console.log(req.user);
+      console.log('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+
+      let long;
+      let lat;
+      if (req.user.location) {
+        long = `${req.user.location.coordinates[1]}`;
+        lat = `${req.user.location.coordinates[0]}`;
+      } else {
+        long = '-6.9439994342171225';
+        lat = '107.5904275402039';
+      }
+
+      console.log(req.user.location);
+      console.log({ long, lat });
+
+      const result = await sequelize.query(
+        `select
+        id,
+        name,
+        description,
+        "imgUrl",
+        price,
+        specs,
+        "CategoryId",
+        status
+      from
+        "Devices"
+      where
+        ST_DWithin(location,
+        ST_MakePoint(:lat,
+        :long),
+        :distance,
+      true) = true;`,
+        {
+          replacements: {
+            distance: +distance,
+            long: parseFloat(long),
+            lat: parseFloat(lat),
+          },
+          logging: console.log,
+          plain: false,
+          raw: false,
+          type: sequelize.QueryTypes.SELECT,
+        }
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   }
 }

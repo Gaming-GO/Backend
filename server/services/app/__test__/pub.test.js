@@ -11,12 +11,16 @@ const user1 = {
   email: 'user1@mail.co',
   password: '12345',
   role: 'Seller',
+  long: '107.5904275402039',
+  lat: '-6.9439994342171225',
 };
 
 const newCustomer = {
   email: 'newCustomer@mail.co',
   password: '12345',
   role: 'seller',
+  long: '107.5904275402039',
+  lat: '-6.9439994342171225',
 };
 
 const newDevice = {
@@ -96,6 +100,10 @@ afterAll((done) => {
 });
 
 describe('Customer Routes Test', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('POST /pub/register - create new user', () => {
     test('201 Success register - should create new user', (done) => {
       request(app)
@@ -295,40 +303,19 @@ describe('Customer Routes Test', () => {
         });
     });
 
-    //mockkk
-    // test('500 ISE', (done) => {
-    //   jest.spyOn(Device, 'findAll').mockRejectedValue('Internal server error');
-    //   request(app)
-    //     .get('/pub/devices')
-    //     .then((res) => {
-    //       // expect your response here
-    //       expect(res.status).toBe(500);
-    //       // expect(res.body).toBe({ message: 'Internal server error' });
-    //       // expect(typeof body).toBe('object');
-    //       done();
-    //     })
-    //     .catch((err) => {
-    //       done(err);
-    //     });
-    // });
+    test('500 Failed fetch - should return error', (done) => {
+      // jest.spyOn(User, 'findOne').mockResolvedValue({ id: 1 });
+      jest.spyOn(Device, 'findAll').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/pub/devices')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
 
-    // test('500 ISE', (done) => {
-    //   // jest.spyOn(Device, 'findAll').mockRejectedValue('Internal server error');
-    //   Device.findAll = jest.fn().mockRejectedValue('Internal server error');
-    //   console.log('===================================================');
-    //   console.log('===================================================');
-    //   console.log('===================================================');
-    //   request(app)
-    //     .get('/pub/devices')
-    //     .end((err, res) => {
-    //       if (err) return done(err);
-    //       const { body, status } = res;
-
-    //       expect(status).toBe(500);
-    //       // expect(Array.isArray(body)).toBeTruthy();
-    //       return done();
-    //     });
-    // });
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
   describe('GET /pub/devices/:id - fetch device by id', () => {
@@ -341,6 +328,19 @@ describe('Customer Routes Test', () => {
 
           expect(status).toBe(200);
           expect(typeof body).toBe('object');
+          return done();
+        });
+    });
+
+    test('500 Failed fetch - should return error', (done) => {
+      jest.spyOn(Device, 'findByPk').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/pub/devices/1')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
           return done();
         });
     });
@@ -359,6 +359,19 @@ describe('Customer Routes Test', () => {
           return done();
         });
     });
+
+    test('500 Failed fetch - should return error', (done) => {
+      jest.spyOn(Category, 'findAll').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/pub/categories')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
   describe('GET /pub/categories/:id - fetch category by id', () => {
@@ -371,6 +384,19 @@ describe('Customer Routes Test', () => {
 
           expect(status).toBe(200);
           expect(typeof body).toBe('object');
+          return done();
+        });
+    });
+
+    test('500 Failed fetch - should return error', (done) => {
+      jest.spyOn(Category, 'findByPk').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/pub/categories/1')
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
           return done();
         });
     });
@@ -390,6 +416,21 @@ describe('Customer Routes Test', () => {
           expect(status).toBe(201);
           expect(typeof body).toBe('object');
           expect(body).toHaveProperty('message', 'Success posted device');
+          return done();
+        });
+    });
+
+    test('500 Failed post - should return error', (done) => {
+      jest.spyOn(Device, 'create').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .post('/pub/devices')
+        .set('access_token', validToken)
+        .send(newDevice)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
           return done();
         });
     });
@@ -429,6 +470,21 @@ describe('Customer Routes Test', () => {
           return done();
         });
     });
+
+    test('500 Failed post - should return error', (done) => {
+      jest.spyOn(Device, 'findByPk').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .post('/pub/rent/1')
+        .set('access_token', validToken)
+        .send({ rentEnd: 2 })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
   describe('GET /pub/transactions - fetch transactions', () => {
@@ -446,12 +502,27 @@ describe('Customer Routes Test', () => {
           return done();
         });
     });
+
+    test('500 Failed post - should return error', (done) => {
+      jest.spyOn(Transaction, 'findOne').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/pub/transactions')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
-  describe('PATCH /pub/transactions - pay transactions', () => {
+  // =====
+  describe('GET /pub/payment - pay transactions', () => {
     test('200 Success fetch - should return an object', (done) => {
       request(app)
-        .patch('/pub/transactions')
+        .get('/pub/payment')
         .set('access_token', validToken)
         .end((err, res) => {
           if (err) return done(err);
@@ -463,5 +534,81 @@ describe('Customer Routes Test', () => {
           return done();
         });
     });
+
+    test('500 Failed post - should return error', (done) => {
+      jest.spyOn(Transaction, 'findOne').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/pub/payment')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
+  });
+
+  describe('PUT /pub/checkout - fetch transactions', () => {
+    test('200 Success fetch - should return an object', (done) => {
+      request(app)
+        .put('/pub/checkout')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(typeof body).toBe('object');
+          return done();
+        });
+    });
+
+    test('500 Failed post - should return error', (done) => {
+      jest.spyOn(Transaction, 'findOne').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .put('/pub/checkout')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
+  });
+
+  describe('GET /pub/nearest - fetch devices', () => {
+    test('200 Success fetch - should return an object', (done) => {
+      request(app)
+        .get('/pub/nearest')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(Array.isArray(body)).toBeTruthy();
+          return done();
+        });
+    });
+
+    // test.only('500 Failed post - should return error', (done) => {
+    //   jest.spyOn(sequelize, 'query').mockRejectedValue({ message: 'Internal server error' });
+    //   request(app)
+    //     .get('/pub/nearest')
+    //     .set('access_token', validToken)
+    //     .end((err, res) => {
+    //       if (err) return done(err);
+    //       const { body, status } = res;
+
+    //       expect(status).toBe(500);
+    //       return done();
+    //     });
+    // });
   });
 });

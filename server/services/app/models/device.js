@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       CategoryId: DataTypes.INTEGER,
       status: DataTypes.STRING,
       specs: DataTypes.STRING,
-      // location: DataTypes.GEOMETRY('POINT'),
+      location: DataTypes.GEOMETRY('POINT'),
     },
     {
       sequelize,
