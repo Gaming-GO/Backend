@@ -143,6 +143,21 @@ class Controllers {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  static async pay(req, res) {
+    const t = await sequelize.transaction();
+    try {
+      const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
+      await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
+      await Detail.destroy({ where: { TransactionId: findTransaction.id } }, { transaction: t });
+
+      await t.commit();
+      res.status(200).json({ message: 'Payment success' });
+    } catch (error) {
+      await t.rollback();
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
 
 module.exports = Controllers;
