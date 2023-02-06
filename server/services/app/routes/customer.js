@@ -13,6 +13,8 @@ router.use(authentication);
 router.post('/devices', Controllers.postDevice);
 router.post('/rent/:deviceId', Controllers.rent);
 router.get('/transactions', Controllers.fetchTransactions);
-// patch transactions
+
+// patch transactions/pay || MIDTRANS
+router.patch('/transactions', Controllers.pay);
 
 module.exports = router;

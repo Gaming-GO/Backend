@@ -276,7 +276,12 @@ describe('Customer Routes Test', () => {
     });
   });
 
+  // mock
   describe('GET /pub/devices - fetch devices', () => {
+    // beforeEach(() => {
+    //   jest.restoreAllMocks();
+    // });
+
     test('200 Success fetch - should return array of object', (done) => {
       request(app)
         .get('/pub/devices')
@@ -290,19 +295,38 @@ describe('Customer Routes Test', () => {
         });
     });
 
+    //mockkk
     // test('500 ISE', (done) => {
-    //   jest.spyOn(Device, 'findAll').mockRejectedValue('Error');
+    //   jest.spyOn(Device, 'findAll').mockRejectedValue('Internal server error');
     //   request(app)
     //     .get('/pub/devices')
     //     .then((res) => {
     //       // expect your response here
     //       expect(res.status).toBe(500);
     //       // expect(res.body).toBe({ message: 'Internal server error' });
-    //       expect(typeof body).toBe('object');
+    //       // expect(typeof body).toBe('object');
     //       done();
     //     })
     //     .catch((err) => {
     //       done(err);
+    //     });
+    // });
+
+    // test('500 ISE', (done) => {
+    //   // jest.spyOn(Device, 'findAll').mockRejectedValue('Internal server error');
+    //   Device.findAll = jest.fn().mockRejectedValue('Internal server error');
+    //   console.log('===================================================');
+    //   console.log('===================================================');
+    //   console.log('===================================================');
+    //   request(app)
+    //     .get('/pub/devices')
+    //     .end((err, res) => {
+    //       if (err) return done(err);
+    //       const { body, status } = res;
+
+    //       expect(status).toBe(500);
+    //       // expect(Array.isArray(body)).toBeTruthy();
+    //       return done();
     //     });
     // });
   });
@@ -411,6 +435,23 @@ describe('Customer Routes Test', () => {
     test('200 Success fetch - should return an object', (done) => {
       request(app)
         .get('/pub/transactions')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+
+          const { body, status } = res;
+
+          expect(status).toBe(200);
+          expect(typeof body).toBe('object');
+          return done();
+        });
+    });
+  });
+
+  describe('PATCH /pub/transactions - pay transactions', () => {
+    test('200 Success fetch - should return an object', (done) => {
+      request(app)
+        .patch('/pub/transactions')
         .set('access_token', validToken)
         .end((err, res) => {
           if (err) return done(err);
