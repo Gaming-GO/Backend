@@ -46,6 +46,10 @@ afterAll((done) => {
 });
 
 describe('Admin Routes Test', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('POST /admin/register - create new user', () => {
     test('201 Success register - should create new user', (done) => {
       request(app)
@@ -228,6 +232,10 @@ describe('Admin Routes Test', () => {
   });
 
   describe('GET /admin/users - fetch users that is havent approved yet', () => {
+    // beforeEach(() => {
+    //   jest.restoreAllMocks();
+    // });
+
     test('200 Success fetch - should return array of object', (done) => {
       request(app)
         .get('/admin/users')
@@ -253,6 +261,21 @@ describe('Admin Routes Test', () => {
 
           expect(status).toBe(401);
           expect(body).toHaveProperty('message', 'Invalid token');
+          return done();
+        });
+    });
+
+    test('500 Failed fetch - should return error', (done) => {
+      jest.spyOn(User, 'findAll').mockRejectedValue({ message: 'Internal server error' });
+      jest.spyOn(User, 'findOne').mockResolvedValue({ id: 1 });
+      request(app)
+        .get('/admin/users')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
           return done();
         });
     });
@@ -288,6 +311,20 @@ describe('Admin Routes Test', () => {
           return done();
         });
     });
+
+    test('500 Failed fetch - should return error', (done) => {
+      jest.spyOn(User, 'findByPk').mockRejectedValue({ message: 'Internal server error' });
+      request(app)
+        .get('/admin/users/1')
+        .set('access_token', validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
   describe('PATCH /user/:id - update user by id', (done) => {
@@ -304,5 +341,19 @@ describe('Admin Routes Test', () => {
           return done();
         });
     });
+  });
+
+  test('500 Failed patch - should return error', (done) => {
+    jest.spyOn(User, 'update').mockRejectedValue({ message: 'Internal server error' });
+    request(app)
+      .patch('/admin/users/1')
+      .set('access_token', validToken)
+      .end((err, res) => {
+        if (err) return done(err);
+        const { body, status } = res;
+
+        expect(status).toBe(500);
+        return done();
+      });
   });
 });
