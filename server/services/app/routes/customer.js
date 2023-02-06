@@ -14,7 +14,12 @@ router.post('/devices', Controllers.postDevice);
 router.post('/rent/:deviceId', Controllers.rent);
 router.get('/transactions', Controllers.fetchTransactions);
 
-// patch transactions/pay || MIDTRANS
-router.patch('/transactions', Controllers.pay);
+// GET transactions/pay || MIDTRANS
+router.get('/payment', Controllers.pay);
+// PUT checkout
+router.put('/checkout', Controllers.checkout);
+
+// GET nearest products
+router.get('/nearest', Controllers.nearest);
 
 module.exports = router;
