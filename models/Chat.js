@@ -10,7 +10,7 @@ module.exports = mongoose => {
       required: [true, "To User is required"]
     },
     message: {
-      type: String,
+      type: [Object],
       required: [true, "Message is required"]
     }
   }, {

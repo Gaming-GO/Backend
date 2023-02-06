@@ -1,7 +1,7 @@
 {
   "development": {
     "database": {
-      "url": "mongodb://localhost/mongoose_dev",
+      "url": "mongodb://127.0.0.1:27017/chatapp",
       "options": {
         "useNewUrlParser": true
       }
