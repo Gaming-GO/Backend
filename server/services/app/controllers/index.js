@@ -6,8 +6,9 @@ const midtransClient = require('midtrans-client');
 class Controllers {
   static async custRegister(req, res) {
     try {
-      const { username, email, password, long, lat, phoneNumber, address, nik } = req.body;
-      const newUser = await User.create({ username, email, password, location: Sequelize.fn(`ST_GeomFromText`, `POINT(${long} ${lat})`), role: 'customer', phoneNumber, address, nik, approved: false });
+      const { username, email, password, long, lat, phoneNumber, address, nik, ktpImg, selfieImg } = req.body;
+
+      const newUser = await User.create({ username, email, password, location: Sequelize.fn(`ST_GeomFromText`, `POINT(${long} ${lat})`), role: 'customer', phoneNumber, address, nik, approved: false, ktpImg, selfieImg });
 
       await Transaction.create({ UserId: newUser.id });
 
@@ -35,6 +36,7 @@ class Controllers {
       if (!valid) throw { name: 'invalid' };
 
       const access_token = signToken({ id: findUser.id });
+      // res.status(200).json({ access_token });
       res.status(200).json({ access_token });
     } catch (error) {
       // console.log(error);
@@ -110,6 +112,9 @@ class Controllers {
     const t = await sequelize.transaction();
     try {
       const { rentEnd } = req.body;
+
+      console.log(rentEnd);
+      // console.log('=====================================');
       const { deviceId } = req.params;
       const device = await Device.findByPk(deviceId);
       if (!device) throw { name: 'not_found' };
@@ -119,7 +124,7 @@ class Controllers {
       const untill = date.setDate(todayDate + rentEnd);
 
       const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
-      await Transaction.update({ totalPrice: findTransaction.totalPrice + device.price }, { where: { id: findTransaction.id } }, { transaction: t });
+      await Transaction.update({ totalPrice: findTransaction.totalPrice + rentEnd * device.price }, { where: { id: findTransaction.id } }, { transaction: t });
 
       await Detail.create({ TransactionId: findTransaction.id, DeviceId: device.id, price: device.price, rentDate: new Date(), rentEnd: untill }, { transaction: t });
 
@@ -127,6 +132,7 @@ class Controllers {
       res.status(201).json({ message: 'Success add to transaction' });
     } catch (error) {
       await t.rollback();
+      console.log(error);
       if (error.name == 'not_found') {
         res.status(404).json({ message: 'Not found' });
         return;
