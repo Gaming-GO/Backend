@@ -5,6 +5,10 @@ module.exports = mongoose => {
       type: Number,
       required: [true, "From User is required"]
     },
+    roomId: {
+      type: String,
+      required: [true, "Room Id is required"]
+    },
     toUserId: {
       type: Number,
       required: [true, "To User is required"]

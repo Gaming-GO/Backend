@@ -17,4 +17,6 @@ const httpServer = createServer(app);
 
 connIOServer(httpServer);
 
+// module.exports = app;
+
 httpServer.listen(port, () => console.log("rnning"));
