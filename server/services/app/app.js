@@ -4,9 +4,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const cors = require('cors');
 const router = require('./routes');
+const { createServer } = require("http");
+const {connIOServer} = require('./socket/socketio');
+// const {Server} = require("socket.io");
+const httpServer = createServer(app);
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -18,6 +22,11 @@ app.use(router);
 //   console.log(`Example app listening on port ${port}`);
 // });
 
-module.exports = app;
+// module.exports = app;
 
 // sequelize db:create --env test && sequelize db:migrate --env test
+
+connIOServer(httpServer);
+
+
+httpServer.listen(port, () => console.log("running"));
