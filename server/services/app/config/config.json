@@ -1,15 +1,15 @@
 {
   "development": {
     "username": "postgres",
-    "password": "postgres",
-    "database": "Gaming_GO_dev",
+    "password": "mantaps229",
+    "database": "chatapppp",
     "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "postgres",
-    "database": "Gaming_GO_test",
+    "password": "mantaps229",
+    "database": "testchatapp",
     "host": "localhost",
     "dialect": "postgres"
   },

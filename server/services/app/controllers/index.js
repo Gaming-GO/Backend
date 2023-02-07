@@ -284,6 +284,30 @@ class Controllers {
       res.status(500).json(error);
     }
   }
+
+  static fetchUserById = async(req,res) => {
+    let globalUser;
+    const userId = req.user.id
+    const userIdParams = +req.params.userId;
+    try {
+      if(!userIdParams) globalUser = userId;
+      else globalUser = userIdParams
+      const users = await User.findByPk(globalUser);
+      if(!users) throw ""
+      res.status(200).json(users)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
+
+  static fetchAllUser = async(req,res) => {
+    try {
+      const allUser = await User.findAll();
+      res.status(200).json(allUser);
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
 }
 
 module.exports = Controllers;
