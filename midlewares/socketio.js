@@ -7,7 +7,7 @@ const users = {};
 function connIOServer(server) {
     io = new Server(server, {
         cors: {
-            origin: "http://localhost:3000"
+            origin: "*"
         }
     })
 
