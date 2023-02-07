@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.9% </span>
+                <span class="strong">96% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>117/122</span>
+                <span class='fraction'>120/125</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.58% </span>
+                <span class="strong">96.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>113/117</span>
+                <span class='fraction'>116/120</span>
             </div>
         
             
@@ -346,7 +346,13 @@
 <a name='L281'></a><a href='#L281'>281</a>
 <a name='L282'></a><a href='#L282'>282</a>
 <a name='L283'></a><a href='#L283'>283</a>
-<a name='L284'></a><a href='#L284'>284</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -355,6 +361,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -383,6 +390,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -458,6 +466,9 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -474,6 +485,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -637,8 +649,9 @@ const midtransClient = require('midtrans-client');
 class Controllers {
   static async custRegister(req, res) {
     try {
-      const { username, email, password, long, lat, phoneNumber, address, nik } = req.body;
-      const newUser = await User.create({ username, email, password, location: Sequelize.fn(`ST_GeomFromText`, `POINT(${long} ${lat})`), role: 'customer', phoneNumber, address, nik, approved: false });
+      const { username, email, password, long, lat, phoneNumber, address, nik, ktpImg, selfieImg } = req.body;
+&nbsp;
+      const newUser = await User.create({ username, email, password, location: Sequelize.fn(`ST_GeomFromText`, `POINT(${long} ${lat})`), role: 'customer', phoneNumber, address, nik, approved: false, ktpImg, selfieImg });
 &nbsp;
       await Transaction.create({ UserId: newUser.id });
 &nbsp;
@@ -666,6 +679,7 @@ class Controllers {
       if (!valid) throw { name: 'invalid' };
 &nbsp;
       const access_token = signToken({ id: findUser.id });
+      // res.status(200).json({ access_token });
       res.status(200).json({ access_token });
     } catch (error) {
       // console.log(error);
@@ -741,6 +755,9 @@ class Controllers {
     const t = await sequelize.transaction();
     try {
       const { rentEnd } = req.body;
+&nbsp;
+      console.log(rentEnd);
+      console.log('=====================================');
       const { deviceId } = req.params;
       const device = await Device.findByPk(deviceId);
       if (!device) throw { name: 'not_found' };
@@ -758,6 +775,7 @@ class Controllers {
       res.status(201).json({ message: 'Success add to transaction' });
     } catch (error) {
       await t.rollback();
+      console.log(error);
       if (error.name == 'not_found') {
         res.status(404).json({ message: 'Not found' });
         return;
@@ -919,7 +937,7 @@ module.exports = Controllers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-02-06T09:35:11.162Z
+                at 2023-02-07T02:37:22.008Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
