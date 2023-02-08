@@ -22,4 +22,7 @@ router.put('/checkout', Controllers.checkout);
 // GET nearest products
 router.get('/nearest', Controllers.nearest);
 
+// GET history
+router.get('/histories', Controllers.histories);
+
 module.exports = router;

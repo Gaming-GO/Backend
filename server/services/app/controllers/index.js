@@ -1,4 +1,4 @@
-const { User, Device, Category, Transaction, Detail, sequelize, Sequelize } = require('../models');
+const { User, Device, Category, Transaction, Detail, sequelize, Sequelize, History } = require('../models');
 const { signToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
 const midtransClient = require('midtrans-client');
@@ -144,10 +144,21 @@ class Controllers {
   static async fetchTransactions(req, res) {
     try {
       const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
-      const findDetails = await Detail.findAll({ where: { TransactionId: findTransaction.id }, include: Device });
+      // const findDetails = await Detail.findAll({ where: { TransactionId: findTransaction.id }, include: Device });
+      const findDetails = await Detail.findAll({
+        where: { TransactionId: findTransaction.id },
+        include: {
+          model: Device,
+          include: {
+            model: User,
+            attributes: { exclude: ['password'] },
+          },
+        },
+      });
       const data = { Transaction: findTransaction, Details: findDetails };
       res.status(200).json(data);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -212,12 +223,29 @@ class Controllers {
       // const user = await User.findByPk(req.user.id);
       const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
       await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
+
+      const finDetails = await Detail.findAll({ where: { TransactionId: findTransaction.id } });
+
+      const forHistory = finDetails.map((e) => {
+        return {
+          DeviceId: e.DeviceId,
+          price: e.price,
+          rentDate: e.rentDate,
+          rentEnd: e.rentEnd,
+          UserId: req.user.id,
+        };
+      });
+
+      // console.log(forHistory);
+      await History.bulkCreate(forHistory, { transaction: t });
+
       await Detail.destroy({ where: { TransactionId: findTransaction.id } }, { transaction: t });
 
       await t.commit();
       res.status(200).json({ message: 'Payment success' });
+      // res.status(200).json(forHistory);
     } catch (error) {
-      console.log(error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+++++++++++++++++++++++++++++++++++++++++++');
+      // console.log(error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+++++++++++++++++++++++++++++++++++++++++++');
       await t.rollback();
       res.status(500).json({ message: 'Internal server error' });
     }
@@ -231,9 +259,9 @@ class Controllers {
       // const long = req.query.long || '-6.9439994342171225';
       // const lat = req.query.lat || '107.5904275402039';
 
-      console.log('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
-      console.log(req.user);
-      console.log('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+      // console.log('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
+      // console.log(req.user);
+      // console.log('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc');
 
       let long;
       let lat;
@@ -282,6 +310,17 @@ class Controllers {
     } catch (error) {
       console.log(error);
       res.status(500).json(error);
+    }
+  }
+
+  static async histories(req, res) {
+    try {
+      const data = await History.findAll({ where: { UserId: req.user.id }, include: Device });
+
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: 'Internal server error' });
     }
   }
 }
