@@ -20,7 +20,7 @@ function connIOServer(server) {
             console.log(data)
             // console.log(data.msg, " inside room");
             // io.emit("resp:msg", data.msg)
-            io.in(data.room).emit("resp:msg", data.msg);
+            io.in(data.room).emit("resp:msg", {msg:data.msg,from:data.from});
         })
         // socket.on("chat message", (data) => {
         //     io.to(users[data.room]).emit("resp", data);
