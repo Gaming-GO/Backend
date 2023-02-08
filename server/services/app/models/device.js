@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Device.belongsTo(models.User);
       Device.belongsTo(models.Category);
       Device.hasMany(models.Detail);
+      // Device.belongsTo(models.History);
     }
   }
   Device.init(
