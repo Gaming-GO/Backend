@@ -1,7 +1,8 @@
-const { User, Device, Category, Transaction, Detail, sequelize, Sequelize } = require('../models');
+const { User, Device, Category, Transaction, Detail, sequelize, Sequelize,History } = require('../models');
 const { signToken } = require('../helpers/jwt');
 const { comparePassword } = require('../helpers/bcrypt');
 const midtransClient = require('midtrans-client');
+const emailSender = require("../helpers/nodemailer")
 
 class Controllers {
   static async custRegister(req, res) {
@@ -171,6 +172,7 @@ class Controllers {
   static async pay(req, res) {
     // const t = await sequelize.transaction();
     try {
+      await emailSender("ruendyant.mayraclle@gmail.com", "dlkfjakjfksajfkl", "dslkfjalkfadjflksdajf");
       const user = await User.findByPk(req.user.id);
       const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
       // await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
@@ -212,12 +214,29 @@ class Controllers {
       // const user = await User.findByPk(req.user.id);
       const findTransaction = await Transaction.findOne({ where: { UserId: req.user.id } });
       await Transaction.update({ totalPrice: 0 }, { where: { UserId: req.user.id } }, { transaction: t });
+
+      const finDetails = await Detail.findAll({ where: { TransactionId: findTransaction.id } });
+
+      const forHistory = finDetails.map((e) => {
+        return {
+          DeviceId: e.DeviceId,
+          price: e.price,
+          rentDate: e.rentDate,
+          rentEnd: e.rentEnd,
+          UserId: req.user.id,
+        };
+      });
+
+      // console.log(forHistory);
+      await History.bulkCreate(forHistory, { transaction: t });
+
       await Detail.destroy({ where: { TransactionId: findTransaction.id } }, { transaction: t });
 
       await t.commit();
       res.status(200).json({ message: 'Payment success' });
+      // res.status(200).json(forHistory);
     } catch (error) {
-      console.log(error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+++++++++++++++++++++++++++++++++++++++++++');
+      // console.log(error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<+++++++++++++++++++++++++++++++++++++++++++');
       await t.rollback();
       res.status(500).json({ message: 'Internal server error' });
     }
@@ -306,6 +325,17 @@ class Controllers {
       res.status(200).json(allUser);
     } catch (error) {
       res.status(500).json(error)
+    }
+  }
+
+  static async histories(req, res) {
+    try {
+      const data = await History.findAll({ where: { UserId: req.user.id }, include: Device });
+
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: 'Internal server error' });
     }
   }
 }
